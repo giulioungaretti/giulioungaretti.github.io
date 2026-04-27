@@ -1,0 +1,44 @@
+name: "💡 Blog Idea"
+description: "Capture a new blog post idea"
+labels: ["blog", "idea"]
+body:
+  - type: input
+    id: working-title
+    attributes:
+      label: Working Title
+      placeholder: "e.g., Setting up k3s on a home server"
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Tech
+        - Career
+        - Personal
+        - Tutorial
+        - Opinion
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "🔴 High — write this week"
+        - "🟡 Medium — write this month"
+        - "🟢 Low — someday"
+    validations:
+      required: true
+  - type: textarea
+    id: outline
+    attributes:
+      label: Rough Outline / Key Points
+      description: "Bullet points, links, fragments — anything to capture the idea"
+      placeholder: |
+        - Main argument or thesis
+        - Key points to cover
+        - Links / references
+    validations:
+      required: false

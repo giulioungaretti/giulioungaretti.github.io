@@ -1,0 +1,11 @@
+title: "Giulio's Blog"
+description: "Thoughts on software, engineering, and building things"
+author: giulio
+url: "https://giulioungaretti.me"
+theme: minima
+permalink: /:year/:month/:title/
+show_excerpts: true
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag

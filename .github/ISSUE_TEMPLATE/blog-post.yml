@@ -1,0 +1,69 @@
+name: "✍️ Blog Post Assignment"
+description: "A post ready to be written (by you or Copilot)"
+labels: ["blog", "writing"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Post Title
+      placeholder: "The final or working title"
+    validations:
+      required: true
+  - type: dropdown
+    id: content-type
+    attributes:
+      label: Content Type
+      options:
+        - Tutorial / How-To
+        - Opinion / Essay
+        - Guide / Reference
+        - Announcement
+        - Review
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Tech
+        - Career
+        - Personal
+    validations:
+      required: true
+  - type: input
+    id: target-date
+    attributes:
+      label: Target Publish Date
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: false
+  - type: input
+    id: word-count
+    attributes:
+      label: Word Count Target
+      placeholder: "e.g., 1500"
+    validations:
+      required: false
+  - type: textarea
+    id: brief
+    attributes:
+      label: Post Brief
+      description: "What should the post cover? Audience, angle, key takeaways."
+      placeholder: |
+        Audience: ...
+        Angle: ...
+        Key sections:
+        1. ...
+        2. ...
+        3. ...
+        Takeaway: ...
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References and Resources
+      description: "Links, docs, code repos relevant to this post"
+    validations:
+      required: false
