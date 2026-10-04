@@ -20,6 +20,7 @@ try {
     [
       { name: 'desktop', width: 1440, height: 1000 },
       { name: 'mobile', width: 390, height: 844 },
+      { name: 'small-mobile', width: 320, height: 740 },
     ].map(async (viewport) => {
       const context = await browser.newContext({
         viewport,
@@ -29,7 +30,15 @@ try {
       const errors = []
       page.on('pageerror', (error) => errors.push(error.message))
       page.on('console', (message) => {
-        if (message.type() === 'error') errors.push(message.text())
+        if (message.type() === 'error') {
+          const url = message.location().url
+          if (
+            url === `${baseURL}/blog/not-a-post/` &&
+            /Failed to load resource.*404/.test(message.text())
+          )
+            return
+          errors.push(`${message.text()} (${url})`)
+        }
       })
       for (const [name, route] of [
         ['home', '/'],
@@ -55,6 +64,42 @@ try {
               ),
           )
         if (['home', 'cv', 'blog', 'post', 'legacy'].includes(name)) {
+          assert.equal(
+            await page.getByRole('slider', { name: 'Page selector' }).count(),
+            0,
+          )
+          assert.equal(await page.getByRole('radio').count(), 2)
+          assert.ok(
+            await page
+              .getByRole('radio', {
+                name: name === 'home' || name === 'cv' ? 'CV' : 'Blog',
+                exact: true,
+              })
+              .isChecked(),
+          )
+          assert.equal(await page.getByRole('heading', { level: 1 }).count(), 1)
+          const colors = await page
+            .locator('.personal-monogram')
+            .evaluate((element) => ({
+              ink: getComputedStyle(element).color,
+              dot: getComputedStyle(element.querySelector('span')).color,
+              canvas: getComputedStyle(document.body).backgroundColor,
+            }))
+          assert.deepEqual(colors, {
+            ink: 'rgb(38, 25, 20)',
+            dot: 'rgb(200, 32, 0)',
+            canvas: 'rgb(255, 255, 255)',
+          })
+          assert.equal(
+            await page.locator('.fascia-nav, .personal-nav').count(),
+            0,
+          )
+          assert.equal(
+            await page
+              .getByRole('link', { name: 'Read my CV', exact: true })
+              .count(),
+            0,
+          )
           assert.ok(
             routeLinks.every(
               (href) =>
@@ -168,53 +213,46 @@ try {
         await page.getByText(/with more than a decade across/).count(),
         1,
       )
-      const dial = page.getByRole('slider', { name: 'Page selector' })
-      await dial.focus()
-      await dial.press('ArrowRight')
-      await page.getByRole('heading', { name: 'Curriculum vitae' }).waitFor()
-      assert.equal(await dial.getAttribute('aria-valuetext'), 'CV')
-      assert.equal(
-        await dial.evaluate((element) => element === document.activeElement),
-        true,
-      )
-      await dial.press('End')
+      const cvKey = page.getByRole('radio', { name: 'CV', exact: true })
+      const blogKey = page.getByRole('radio', { name: 'Blog', exact: true })
+      const selector = page.locator('.personal-page-switch')
+      await cvKey.focus()
+      const original = await selector.boundingBox()
+      assert.ok(original)
+      await cvKey.press('ArrowRight')
       await page
         .getByRole('heading', { name: 'Writing', exact: true })
         .waitFor()
-      assert.equal(await dial.getAttribute('aria-valuetext'), 'Blog')
+      assert.ok(await blogKey.isChecked())
       assert.equal(
-        await dial.evaluate((element) => element === document.activeElement),
+        await blogKey.evaluate((element) => element === document.activeElement),
         true,
       )
-      await dial.press('Home')
-      await page
-        .getByRole('heading', { name: 'Giulio Jensen Ungaretti' })
-        .waitFor()
-      assert.equal(await dial.getAttribute('aria-valuetext'), 'Home')
-      await dial.scrollIntoViewIfNeeded()
-      const dialBounds = await dial.boundingBox()
-      assert.ok(dialBounds)
-      const centerX = dialBounds.x + dialBounds.width / 2
-      const centerY = dialBounds.y + dialBounds.height / 2
-      const radius = dialBounds.width * 0.35
-      await page.mouse.move(centerX, centerY - radius)
-      await page.mouse.down()
-      for (let step = 1; step <= 12; step++) {
-        const angle = (((60 * step) / 12) * Math.PI) / 180
-        await page.mouse.move(
-          centerX + Math.sin(angle) * radius,
-          centerY - Math.cos(angle) * radius,
+      const blogBounds = await selector.boundingBox()
+      assert.ok(blogBounds)
+      for (const property of ['x', 'y', 'width', 'height'])
+        assert.ok(
+          Math.abs(original[property] - blogBounds[property]) < 1,
+          `Selector ${property} shifted`,
         )
-      }
-      await page.mouse.up()
-      await page.getByRole('heading', { name: 'Curriculum vitae' }).waitFor()
-      assert.equal(await dial.getAttribute('aria-valuetext'), 'CV')
-      await dial.hover()
-      await page.mouse.wheel(0, 100)
+      await blogKey.press('ArrowLeft')
+      await page
+        .getByRole('heading', { name: 'Experience', exact: true })
+        .waitFor()
+      assert.ok(await cvKey.isChecked())
+      assert.ok(
+        await cvKey.evaluate((element) => element === document.activeElement),
+      )
+      await page
+        .locator('.personal-switch-key')
+        .filter({
+          has: page.locator('input[value="blog"]'),
+        })
+        .click()
       await page
         .getByRole('heading', { name: 'Writing', exact: true })
         .waitFor()
-      assert.equal(await dial.getAttribute('aria-valuetext'), 'Blog')
+      assert.ok(await blogKey.isChecked())
       const pdf = await context.request.get(
         `${baseURL}/giulio-jensen-ungaretti-cv.pdf`,
       )
@@ -245,6 +283,17 @@ try {
   if (process.env.EXPECT_PRERENDER) {
     const context = await browser.newContext({ javaScriptEnabled: false })
     const reader = await context.newPage()
+    await reader.goto(`${baseURL}/`)
+    await reader
+      .getByRole('heading', { name: 'Experience', exact: true })
+      .waitFor()
+    await reader
+      .getByRole('navigation', { name: 'Personal site without JavaScript' })
+      .getByRole('link', { name: 'Blog', exact: true })
+      .click()
+    await reader
+      .getByRole('heading', { name: 'Writing', exact: true })
+      .waitFor()
     await reader.goto(`${baseURL}/2026/04/hello-world/`)
     await reader
       .getByRole('heading', { name: 'Hello World', level: 1 })
@@ -265,7 +314,7 @@ try {
     'Resolve accessibility findings above',
   )
   console.log(
-    'Desktop/mobile routes, live rotary navigation, revised copy, local interactions, keyboard entry, PDF, and accessibility checks passed.',
+    'Desktop/mobile routes, fixed CV/Blog selection, revised copy, local interactions, keyboard entry, PDF, and accessibility checks passed.',
   )
 } finally {
   await browser.close()

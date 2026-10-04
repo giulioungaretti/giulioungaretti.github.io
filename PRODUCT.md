@@ -16,13 +16,13 @@ Visitors reading Giulio Jensen Ungaretti's professional history and developers e
 
 ## Capabilities and Constraints
 
-Personal routes: homepage `/`, full CV `/cv`, writing index `/blog`, and Markdown articles `/blog/:slug/`. Separate demo admin entry/control routes and a standalone component showcase remain. React, TypeScript, Vite, Tailwind CSS, shadcn/ui with accessible Radix primitives, typed variants, and lucide icons. No real authentication, telemetry, server administration, or API integration. Demo entry must not collect credentials.
+Personal routes: CV homepage `/`, legacy full-CV alias `/cv`, writing index `/blog`, and Markdown articles `/blog/:slug/`. Separate demo admin entry/control routes and a standalone component showcase remain. React, TypeScript, Vite, Tailwind CSS, shadcn/ui with accessible Radix primitives, typed variants, and lucide icons. No real authentication, telemetry, server administration, or API integration. Demo entry must not collect credentials.
 
 The homepage, CV and blog now form one personal site with shared navigation. The admin demo and design-system showcase remain independent surfaces; they must not link to the personal site or one another. Admin entry and exit remain within the admin flow. All surfaces reuse the same component library and semantic tokens.
 
 Posts are written in Markdown with YAML frontmatter in `_posts/`; `_drafts/` stays unpublished. Published pages are prerendered static HTML for GitHub Pages. Future-dated posts stay out of browser/publication output until a build on their UTC publication day. The user authorized publication to the existing blog repository and a separate public component-library repository. Push/manual/daily GitHub Actions builds publish the personal site; the library repository owns reusable components and its standalone showcase.
 
-The user-approved wide-fascia identity plate replaces the decorative vent lines with introduction text, keeps `gu.`, and supplies genuine Home/CV/Blog rotary navigation. It remains visible on mobile. The introduction describes experience as “more than a decade”; the original downloadable PDF remains unchanged.
+The user-approved personal composition is Cassette sleeve, Sun tray controls, Editorial-led date ink and White studio page surroundings. `gu.` and the full name stay close in a fixed sleeve, with a single native CV/Blog radio selector and no separate Home view or rotary control. The full CV is the homepage; `/cv` remains a compatible alias. The introduction says “more than a decade”; the original PDF remains unchanged. These are site-owned composition changes, not modifications to the separate design-system package, its primitives, tokens or version pin.
 
 ## Brand Commitments
 

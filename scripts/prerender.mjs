@@ -70,7 +70,6 @@ await writeFile(
 
 const personalPaths = [
   '/',
-  '/cv/',
   '/blog/',
   ...posts.map((post) => `/blog/${post.slug}/`),
 ]

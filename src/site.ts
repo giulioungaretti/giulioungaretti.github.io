@@ -35,7 +35,7 @@ export function pageMetadata(path: string): PageMetadata {
         'Software and AI engineering leader. Professional history and writing on software, engineering, and building things.',
     },
     '/cv': {
-      title: `Curriculum vitae — ${site.name}`,
+      title: 'Giulio Ungaretti — software & AI',
       description:
         'Giulio Jensen Ungaretti’s experience, education, community work, and original CV download.',
     },
@@ -61,11 +61,12 @@ export function pageMetadata(path: string): PageMetadata {
   }
   const normalized = normalizePath(path)
   const page = pages[normalized]
+  const canonicalPath = normalized === '/cv' ? '/' : normalized
   return {
     title: page?.title ?? `Page not found — ${site.name}`,
     description:
       page?.description ?? 'This address does not match a page on this site.',
-    canonical: `${site.url}${normalized === '/' ? '/' : `${normalized}/`}`,
+    canonical: `${site.url}${canonicalPath === '/' ? '/' : `${canonicalPath}/`}`,
     noIndex: page?.noIndex ?? !page,
   }
 }

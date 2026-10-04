@@ -1,6 +1,6 @@
 # Personal site and home design system
 
-A unified personal homepage, CV and Markdown blog, plus independent home-server demo and component-reference surfaces. All use the same Braun-inspired design system: neutral enamel, precise borders, shallow panels, circular physical controls, and raised/pressed button states. Personal pages share Home/CV/Blog navigation; the admin demo and component showcase remain separate.
+A personal CV homepage and Markdown blog, plus independent home-server demo and component-reference surfaces. All use the same Braun-inspired design system. The personal site uses the approved White studio cassette, Editorial-led date ink and a joined Sun tray CV/Blog selector; the admin demo and component showcase remain separate.
 
 ## Start
 
@@ -40,15 +40,15 @@ npm run test:browser
 
 | Route            | Purpose                                                                                     |
 | ---------------- | ------------------------------------------------------------------------------------------- |
-| `/`              | Personal introduction, CV link and latest published writing                                 |
-| `/cv`            | Full source-backed CV and original PDF download                                             |
+| `/`              | Full source-backed CV, professional introduction and original PDF download                  |
+| `/cv`            | Backward-compatible full CV alias, canonicalized to `/`                                     |
 | `/blog`          | Published Markdown writing, newest first                                                    |
 | `/blog/:slug/`   | Full Markdown article with its own static HTML and metadata                                 |
 | `/login`         | **Demo admin login**, without credential inputs or real authentication                      |
 | `/admin`         | Illustrative service list, search, state tabs, detail inspection, local switch, reset, exit |
 | `/design-system` | Interactive buttons, switches, tabs, form feedback, material examples, palette credits      |
 
-Home, CV and Blog are now one personal site. Admin and the component showcase are opened directly by their addresses; they do not link to the personal site or one another. Layouts compose a shared `PageFrame` and the same design-system components/tokens.
+CV and Blog are the two personal views; there is no separate Home view. Admin and the component showcase are opened directly by their addresses and do not cross-link. The personal layout owns the cassette composition; admin/reference layouts retain `PageFrame`. All reuse the unchanged shared design-system package and tokens.
 
 Fresh `/admin` deep links show demo entry. This is **not an authorization boundary**. Entry is a React boolean, not authentication. Every app name—including leggmini, giornale, presentami, and workbench—is illustrative. “Running” and “paused” are in-memory UI states, not live service information. No admin operation makes a network request, deploys software, or changes a server. Counts are derived from the current demo state, not telemetry.
 
@@ -135,7 +135,7 @@ src/
   site.ts                # verified domain and route metadata
   data/cv.ts             # content transcribed from the provided PDF
   data/services.ts       # typed illustrative data and pure filtering
-  pages/                 # Home, Cv, Blog, BlogArticle, Login, Admin, Showcase
+  pages/                 # Cv, Blog, BlogArticle, Login, Admin, Showcase
   prerender.tsx          # static React rendering entry
   App.tsx                # route groups, focus and document-title updates
   test/                  # Vitest + Testing Library
@@ -143,13 +143,13 @@ src/
 
 `_posts/` and `_drafts/` live at the root. `scripts/content.ts` exposes only validated/published posts to Vite as `virtual:posts`; draft/future Markdown never enters that browser module. `scripts/prerender.mjs` creates static pages and feeds from the same manifest. Frontmatter validation is build-only, not duplicated in client components.
 
-There is no design-system package, backend abstraction, global state library, or unnecessary theme provider. Local state belongs to its route. The root owns only route composition, demo entry, and focus/title updates—not shared site navigation. Strict TypeScript includes unchecked-index and exact-optional-property checks; third-party declarations are checked too.
+The separate design-system package owns reusable primitives and semantic tokens. This site owns composition and personal-route styling; it has no backend abstraction, global state library or unnecessary theme provider. Local state belongs to its route. Strict TypeScript includes unchecked-index and exact-optional-property checks; third-party declarations are checked too.
 
 ## Component usage
 
 Import primitives from `@/components/ui/*` and composed components from `@/components/system`. The `@/` alias resolves to `src/`.
 
-The approved wide-fascia identity plate is used on Home, CV and the blog archive. Its persistent three-position `NavigationDial` is the **only site-wide page selector**: no duplicate Home/CV/Blog top navigation or CV/writing buttons. It is controlled by a typed `'home' | 'cv' | 'blog'` value and an `onValueChange` callback, with mouse/touch rotation, end stops, release-to-snap, native range keys, clickable labels, and focused-only scrolling. Escape, pointer cancellation or focus loss restores the current selection. The dial navigates real routes without losing keyboard focus; articles use a compact header with the same selector. The CV retains its PDF download, and content links still open articles. A footer navigation fallback appears only when JavaScript is disabled. The earlier composition gallery remains a development-only prototype.
+The approved personal composition is **Cassette sleeve + Sun tray + Editorial-led + White studio**. Identity and the CV/Blog selector stay in a shallow enamel sleeve; the introduction and records sit in the reading sheet below. `PersonalPageSwitch` is app-specific composition over the package's unchanged `Button`: two native radio keys, a yellow trough, white selected cap, visible focus, and native arrow-key operation. Route changes preserve control focus. No Home choice, dial, duplicate top navigation, role caption or decorative status dot remains. Articles use the same sleeve and keep their own title as the page's `h1`. The original PDF and article links remain, with CV/Blog links available without JavaScript. Development-only mockups are not exported or deployed. The library's rotary component remains available independently; this site does not modify it.
 
 ```tsx
 import { RotateCcw } from 'lucide-react'

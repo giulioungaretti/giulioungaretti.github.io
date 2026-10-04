@@ -3,7 +3,6 @@ import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { PageHeading } from '@/components/system'
-import { Home } from '@/pages/Home'
 import { Cv } from '@/pages/Cv'
 import { Blog } from '@/pages/Blog'
 import { BlogArticle } from '@/pages/BlogArticle'
@@ -28,7 +27,7 @@ export function App() {
     const metadata = pageMetadata(location.pathname)
     updateDocumentMetadata(metadata)
     if (initialPath.current !== location.pathname) {
-      if (!document.activeElement?.closest('.navigation-dial')) {
+      if (!document.activeElement?.closest('.personal-page-switch')) {
         mainRef.current?.focus()
         window.scrollTo({ top: 0, behavior: 'instant' })
       } else if (document.activeElement instanceof HTMLElement) {
@@ -42,7 +41,7 @@ export function App() {
     <TooltipProvider delayDuration={400}>
       <Routes>
         <Route element={<PersonalLayout mainRef={mainRef} />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Cv />} />
           <Route path="/cv" element={<Cv />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogArticle />} />
@@ -56,7 +55,7 @@ export function App() {
                   to the homepage.
                 </PageHeading>
                 <Button asChild variant="outline">
-                  <Link to="/">Back to home</Link>
+                  <Link to="/">Back to CV</Link>
                 </Button>
               </>
             }

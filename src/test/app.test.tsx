@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -26,28 +26,32 @@ describe('CV and navigation', () => {
       screen.getByText(/with more than a decade across/),
     ).toBeInTheDocument()
     expect(screen.queryByText(/13\+ years/)).not.toBeInTheDocument()
-    expect(container.querySelector('.personal-fascia')).toBeInTheDocument()
+    expect(container.querySelector('.personal-cassette')).toBeInTheDocument()
     expect(container.querySelector('.vent')).not.toBeInTheDocument()
   })
-  it('routes with the persistent rotary selector without stealing its focus', () => {
+  it('routes with the persistent CV/Blog selector without stealing focus', async () => {
     renderRoute()
-    const dial = screen.getByRole('slider', { name: 'Page selector' })
-    dial.focus()
-    fireEvent.change(dial, { target: { value: '1' } })
-    expect(
-      screen.getByRole('heading', { name: 'Curriculum vitae' }),
-    ).toBeInTheDocument()
-    expect(screen.getByRole('slider')).toBe(dial)
-    expect(dial).toHaveFocus()
-    fireEvent.change(dial, { target: { value: '2' } })
+    const cv = screen.getByRole('radio', { name: 'CV' })
+    const blog = screen.getByRole('radio', { name: 'Blog' })
+    cv.focus()
+    await userEvent.keyboard('{ArrowRight}')
     expect(screen.getByRole('heading', { name: 'Writing' })).toBeInTheDocument()
-    expect(dial).toHaveFocus()
-    expect(dial).toHaveAttribute('aria-valuetext', 'Blog')
+    expect(blog).toBeChecked()
+    expect(blog).toHaveFocus()
+    await userEvent.keyboard('{ArrowLeft}')
+    expect(
+      screen.getByRole('heading', { name: 'Experience' }),
+    ).toBeInTheDocument()
+    expect(cv).toBeChecked()
+    expect(cv).toHaveFocus()
   })
   it('shows factual CV content and an original PDF download', () => {
     renderRoute('/cv')
     expect(
-      screen.getByRole('heading', { name: 'Curriculum vitae' }),
+      screen.getByRole('heading', {
+        name: 'Giulio Jensen Ungaretti',
+        level: 1,
+      }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: 'Novo Nordisk' }),
@@ -60,20 +64,23 @@ describe('CV and navigation', () => {
     expect(
       screen.getByRole('link', { name: 'Download CV (PDF)' }),
     ).toHaveAttribute('href', '/giulio-jensen-ungaretti-cv.pdf')
-    expect(
-      screen.getByRole('slider', { name: 'Page selector' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'CV' })).toBeInTheDocument()
     expect(
       screen.queryByRole('link', { name: 'Admin login' }),
     ).not.toBeInTheDocument()
   })
   it.each(['/', '/cv', '/blog', '/blog/hello-world'])(
-    'uses only the dial for site navigation on %s',
+    'uses only the joined CV/Blog selector for site navigation on %s',
     (path) => {
       const { container } = renderRoute(path)
+      expect(screen.getAllByRole('radio')).toHaveLength(2)
+      expect(screen.queryByRole('slider')).not.toBeInTheDocument()
       expect(
-        screen.getAllByRole('slider', { name: 'Page selector' }),
-      ).toHaveLength(1)
+        screen.queryByRole('button', { name: 'Home' }),
+      ).not.toBeInTheDocument()
+      expect(container.querySelectorAll('.personal-page-switch')).toHaveLength(
+        1,
+      )
       expect(container.querySelector('.fascia-nav')).not.toBeInTheDocument()
       expect(container.querySelector('.personal-nav')).not.toBeInTheDocument()
       expect(
@@ -100,9 +107,9 @@ describe('CV and navigation', () => {
     expect(
       screen.getByRole('heading', { name: 'This page isn’t here.' }),
     ).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('link', { name: 'Back to home' }))
+    await userEvent.click(screen.getByRole('link', { name: 'Back to CV' }))
     expect(
-      screen.getByRole('heading', { name: 'Latest writing' }),
+      screen.getByRole('heading', { name: 'Experience' }),
     ).toBeInTheDocument()
   })
 })

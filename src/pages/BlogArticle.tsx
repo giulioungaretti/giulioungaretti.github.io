@@ -16,14 +16,14 @@ export function BlogArticle() {
           incorrect.
         </PageHeading>
         <Button asChild variant="outline">
-          <Link to="/blog">Back to writing</Link>
+          <Link to="/blog/">Back to writing</Link>
         </Button>
       </>
     )
 
   return (
     <div className="article-layout">
-      <Link to="/blog" className="text-link article-back">
+      <Link to="/blog/" className="text-link article-back">
         <ArrowLeft size={15} aria-hidden="true" />
         All writing
       </Link>
@@ -41,7 +41,7 @@ export function BlogArticle() {
         <MarkdownBody>{post.markdown}</MarkdownBody>
         <footer className="article-footer">
           <span>{post.tags.join(' · ')}</span>
-          <Link to="/blog" className="text-link">
+          <Link to="/blog/" className="text-link">
             Back to writing
             <ArrowLeft size={15} aria-hidden="true" />
           </Link>

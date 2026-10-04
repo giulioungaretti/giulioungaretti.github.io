@@ -69,19 +69,19 @@ typography:
     lineHeight: 1.7
   fascia-monogram:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-    fontSize: '64px'
+    fontSize: '32px'
     fontWeight: 700
   fascia-monogram-mobile:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-    fontSize: '54px'
+    fontSize: '32px'
     fontWeight: 700
   fascia-title:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-    fontSize: '34px'
+    fontSize: '24px'
     fontWeight: 500
   fascia-title-mobile:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-    fontSize: '29px'
+    fontSize: '19px'
     fontWeight: 500
   fascia-body:
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -151,7 +151,7 @@ The settled identity comes from real Braun appliances and Dieter Rams: neutral e
 - Helvetica-led hierarchy with generous reading measure.
 - Mechanical depth communicates control state.
 
-The personal site combines homepage `/`, CV `/cv`, writing `/blog`, and Markdown articles (Read). Those personal pages share navigation and may link to one another. Demo entry `/login`, admin `/admin` (Operate), and showcase `/design-system` (Read/Experience) remain independent, without links to the personal site or each other. All share components, tokens, and structural `PageFrame`. The demo is local only: no server or authentication; entry is an in-memory gate. The CV is extracted from the supplied original PDF; preserve its factual content.
+The personal site uses the full CV as homepage `/`, with `/cv` retained as a canonicalized alias, writing `/blog`, and Markdown articles (Read). Its only page selector is CV/Blog. Demo entry `/login`, admin `/admin` (Operate), and showcase `/design-system` (Read/Experience) remain independent. They retain `PageFrame`; the personal site owns its cassette layout. Shared components, tokens and the separate library repository are unchanged. The CV facts and original PDF are preserved.
 
 ## Colors
 
@@ -180,11 +180,13 @@ The exact Never-Setting-Sun palette is **by Halifax**, [COLOURlovers palette 306
 
 **The Enamel and Signal Rule.** Keep the broad surfaces neutral; use the palette's saturated colors for the implemented controls and indicators. The showcase's full-color swatches are deliberate specimens.
 
+**Personal-site selection:** White studio surroundings and reading paper, neutral enamel sleeve, a yellow Sun tray with a white selected key, chocolate ink and focus, red chronology/publication dates, and Frost/orange reading-link feedback. These are scoped site roles; they do not change the package's action/status semantics, token source or other surfaces.
+
 ## Typography
 
 Helvetica Neue, Helvetica, Arial and sans-serif form the display/body stack. SFMono-Regular, Consolas, Liberation Mono and monospace serve code. The hierarchy is role-based, not a geometric modular scale.
 
-- **Identity fascia:** the user-selected wide-fascia composition replaces the old oversized CV name and vented identity tile. Its `gu.` monogram is 64px/700 (54px on mobile), title 34px/500 (29px on mobile), and introduction 17px/1.8 (15px on mobile). This compact precision-appliance typography is specific to the accepted identity plate; article and component-reference scales remain unchanged.
+- **Personal cassette:** the approved shallow sleeve keeps `gu.` at 32px/700, beside the full name at 24px/500 (19px on mobile). Reading section labels are 19px/600; record titles remain 19px/500. Introduction copy is 17px/1.75 (15px on mobile). Article titles use 34px (29px on mobile). These app-specific roles do not change component-reference typography.
 - **Headline / title:** page headings use the headline ramp; section and detail headings use the title role. CV employer names are smaller (19px, weight 500).
 - **Body:** introductions use the body role with a 65ch measure. CV summary and record copy use line-height 1.75; record copy is 15px and up to 75ch. Mobile summary copy becomes 15px.
 - **Labels:** field labels are 14px/500; helper/error text is 13px/1.6. Page-shell labels are 14px, becoming 12px on mobile. Status, credits and code use 12px. Button/tab labels use 14px/20px, weight 500.
@@ -194,12 +196,12 @@ Headings balance their wrapping; paragraphs use pretty wrapping. Type is sentenc
 
 ## Layout
 
-The centered shell caps at 1200px with 48px side gutters. The topbar is at least 106px tall; page padding is 68px above and 80px below. Recurring internal gaps are 12–24px, with larger section separation around 40px. Panels have contextual padding rather than one universal inset.
+The personal shell caps at 1120px, with 40px/44px outer padding. The sleeve uses 18px/24px insets; its reading sheet is inset 10px and padded 28px/32px/32px. The CV/Blog key assembly remains fixed between views. At 700px the shell uses 24px/20px padding, identity and selector stack, and the reading sheet uses 24px/18px with no lateral inset. Admin/reference retain the prior 1200px shell and topbar grammar below.
 
 - **Up to 1000px:** shell gutters become 32px. CV opening narrows from a 328px plate column/68px gap to 260px/40px. The admin's 320px detail column drops below the service list, with its contents arranged in two columns.
-- **Up to 700px:** gutters become 20px; the article/demo topbar wraps and shrinks to an 88px minimum. Page padding becomes 40px/56px. CV record rows, education/community, detail and showcase sections stack. The accepted identity fascia remains visible on mobile; its controls wrap and its rotary selector centers below the actions. Service rows retain their controls while redundant inline status text hides. Palette specimens change from five to three columns; the footer stacks.
+- **Up to 700px:** the personal cassette stacks identity and the joined selector without moving the selector when CV/Blog changes. Personal records and support sections become single-column. Demo/reference gutters become 20px and their topbars shrink to an 88px minimum; their existing responsive behavior remains unchanged.
 - **Reading versus operation:** the CV uses dated rows separated by rules, not a stack of cards. The demo entry is capped at 650px; the showcase pairs a 230px explanatory column with specimens until mobile stacking.
-- **Writing:** articles center within 760px; their prose is capped at 72ch. Archive rows reuse the CV's 178px date column and ruled-record grammar, stacking on mobile. Tables and code scroll horizontally inside keyboard-focusable regions, never across the page.
+- **Writing:** articles center within 760px and prose remains capped at 72ch. Personal archive/CV rows use a 116px date column, 24px gap and ruled-record grammar, stacking on mobile. Tables and code keep keyboard-focusable internal overflow.
 
 The body has a 320px minimum width. These are the custom CSS breakpoints, not Tailwind's default breakpoint names.
 
@@ -229,9 +231,9 @@ The shadcn-generated Radix sources are customized to the appliance material. `Bu
 - **Fields:** 48px minimum height, card fill, inset contact shadow and the shared radius. Invalid fields get a destructive border; helper/error copy accompanies examples. Disabled fields use 50% opacity; buttons and tab keys use 45%.
 - **Tabs:** default is an inset muted track (48px minimum height) with 40px minimum-height keys. Active keys gain card fill, border and raised shadow. The line variant removes the track fill/border; it does not introduce a new visual world.
 - **Switches:** 48×28px inset track; 20px card-colored thumb. Checked uses Sun fill and 24px thumb translation; unchecked translates 2px. The exposed `size` prop currently does not alter geometry.
-- **Page shells:** the personal `gu.` wordmark links to the personal homepage, alongside Home/CV/Blog navigation. Active personal links have a chocolate underline. Admin uses the non-interactive `home.` label, and the showcase uses non-interactive `form.`. Neither links to the personal site. Headers/footers stay relevant to their own surface; entry/exit remain in the admin flow.
+- **Page shells:** the non-linked personal identity and one joined native CV/Blog radio selector occupy the sleeve. The selector composes the package Button without changing it; Home, dial, extra top navigation and duplicate role/caption are absent. Article identity uses a paragraph so the article retains its own `h1`. Admin `home.` and showcase `form.` remain non-interactive and independent.
 - **Markdown:** GFM is rendered with the shared typography, muted code/table surfaces, crisp rules, and existing radius. Raw HTML is displayed as text, not executed. Task lists have real labels; code/table overflow regions have keyboard focus. No prose introduces extra colors or unrelated card styling.
-- **Status / signature material:** orange means on, muted means off, red means alert; text accompanies the dot. The identity plate's CSS vents, dial and lamp are decorative, not interactive controls.
+- **Status / signature material:** operational source conventions remain unchanged. The personal wordmark keeps its red signature dot but adds no status lamp or decorative section dot. The package's rotary control remains available independently; it is not used for personal-site navigation.
 
 Control shadow and transform transitions use 160ms with `--ease-mechanical`; background color uses 160ms with the CSS default ease. Hover darkens controls via brightness 0.97. Switch-thumb transform uses Tailwind's 150ms `cubic-bezier(0.4, 0, 0.2, 1)` default. Tabs have no added custom transition. Reduced motion disables all animations/transitions and restores automatic scroll behavior.
 

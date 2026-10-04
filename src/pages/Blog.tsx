@@ -5,9 +5,9 @@ export function Blog() {
   return (
     <section className="blog-archive" aria-labelledby="archive-heading">
       <h2 id="archive-heading" className="section-heading">
-        All posts
+        Writing
       </h2>
-      <PostList posts={posts} />
+      <PostList posts={posts} headingLevel={3} />
     </section>
   )
 }

@@ -1,4 +1,3 @@
-import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { formatPostDate, postPath } from '@/lib/blog'
 import type { BlogPost } from '@/types/blog'
@@ -28,7 +27,6 @@ export function PostList({
             <Heading className="post-title">
               <Link to={postPath(post)}>
                 <span>{post.title}</span>
-                <ArrowUpRight aria-hidden="true" />
               </Link>
             </Heading>
             <p className="post-description">{post.description}</p>

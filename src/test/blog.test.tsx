@@ -20,16 +20,15 @@ describe('combined personal site', () => {
     (path) => {
       page(path)
       expect(
-        within(screen.getByRole('group', { name: 'Rotary navigation' }))
-          .getAllByRole('button')
-          .map((button) => button.textContent),
-      ).toEqual(['Home', 'CV', 'Blog'])
+        within(screen.getByRole('group', { name: 'Choose CV or Blog' }))
+          .getAllByRole('radio')
+          .map((radio) => radio.getAttribute('value')),
+      ).toEqual(['cv', 'blog'])
       expect(
-        screen.getByRole('slider', { name: 'Page selector' }),
-      ).toHaveAttribute(
-        'aria-valuetext',
-        path === '/' ? 'Home' : path === '/cv' ? 'CV' : 'Blog',
-      )
+        screen.getByRole('radio', {
+          name: path === '/' || path === '/cv' ? 'CV' : 'Blog',
+        }),
+      ).toBeChecked()
       const hrefs = screen
         .getAllByRole('link')
         .map((link) => link.getAttribute('href'))
@@ -38,11 +37,15 @@ describe('combined personal site', () => {
       expect(hrefs).not.toContain('/design-system')
     },
   )
-  it('shows the real post on the homepage and lets a visitor read it', async () => {
+  it('shows the full CV at the homepage and the real post through Blog', async () => {
     page('/')
     expect(
-      screen.getByRole('heading', { name: 'Latest writing' }),
+      screen.getByRole('heading', { name: 'Experience' }),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: 'Hello World' }),
+    ).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('radio', { name: 'Blog' }))
     await userEvent.click(screen.getByRole('link', { name: 'Hello World' }))
     expect(
       screen.getByRole('heading', { name: 'Hello World', level: 1 }),
@@ -55,6 +58,16 @@ describe('combined personal site', () => {
     expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute(
       'href',
       'https://giulioungaretti.me/blog/hello-world/',
+    )
+  })
+  it('retains /cv as a full-content alias with the homepage canonical', () => {
+    page('/cv/')
+    expect(
+      screen.getByRole('heading', { name: 'Novo Nordisk' }),
+    ).toBeInTheDocument()
+    expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://giulioungaretti.me/',
     )
   })
   it('preserves the existing Jekyll article URL with a new canonical address', () => {
