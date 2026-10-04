@@ -1,0 +1,190 @@
+.personal-fascia.identity-plate {
+  display: block;
+  width: auto;
+  padding: 44px 48px 34px;
+  min-height: auto;
+  margin-bottom: 48px;
+  container: personal-fascia / inline-size;
+}
+
+.fascia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.fascia-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  text-decoration: none;
+}
+
+.fascia-monogram {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.fascia-light {
+  width: 9px;
+  height: 9px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: inset 0 1px 2px rgb(38 25 20 / 25%);
+}
+
+.fascia-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.fascia-nav a {
+  min-width: 44px;
+  min-height: 44px;
+  padding-block: 12px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+}
+
+.fascia-nav a[aria-current='page'] {
+  color: var(--foreground);
+  border-color: var(--foreground);
+}
+
+.fascia-nav a:hover {
+  color: var(--foreground);
+}
+
+.fascia-copy {
+  margin-top: 54px;
+}
+
+.fascia-copy h1 {
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.fascia-role {
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.fascia-intro {
+  max-width: 68ch;
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--muted-foreground);
+}
+
+.fascia-controls {
+  border-top: 1px solid var(--border);
+  margin-top: 42px;
+  padding-top: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.fascia-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.fascia-material {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.fascia-caption {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.blog-archive > h2 {
+  margin-bottom: 24px;
+}
+
+@media (max-width: 750px) {
+  .personal-fascia.identity-plate {
+    padding: 28px;
+  }
+
+  .fascia-material .fascia-caption {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .personal-fascia.identity-plate {
+    padding: 26px 24px 24px;
+    margin-bottom: 32px;
+  }
+
+  .fascia-monogram {
+    font-size: 54px;
+  }
+
+  .fascia-brand {
+    gap: 12px;
+  }
+
+  .fascia-header {
+    gap: 20px;
+  }
+
+  .fascia-nav {
+    gap: 18px;
+  }
+
+  .fascia-nav a {
+    font-size: 12px;
+  }
+
+  .fascia-copy {
+    margin-top: 34px;
+  }
+
+  .fascia-copy h1 {
+    font-size: 29px;
+  }
+
+  .fascia-role {
+    font-size: 15px;
+    margin-top: 14px;
+  }
+
+  .fascia-intro {
+    font-size: 15px;
+    margin-top: 22px;
+  }
+
+  .fascia-controls {
+    margin-top: 28px;
+    padding-top: 24px;
+  }
+
+  .fascia-material {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .personal-fascia .navigation-dial {
+    --dial-size: 60px;
+  }
+}
