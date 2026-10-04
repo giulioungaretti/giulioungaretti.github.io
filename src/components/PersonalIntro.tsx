@@ -1,5 +1,4 @@
-import { ArrowDownToLine, ArrowRight } from 'lucide-react'
-import { Link, NavLink } from 'react-router-dom'
+import { ArrowDownToLine } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Panel } from '@/components/system'
 import { NavigationDial } from '@/components/NavigationDial'
@@ -20,21 +19,10 @@ export function PersonalIntro({
       aria-labelledby="personal-title"
     >
       <div className="fascia-header">
-        <Link
-          to="/"
-          className="fascia-brand"
-          aria-label="Giulio Ungaretti home"
-        >
+        <div className="fascia-brand">
           <span className="fascia-monogram">gu.</span>
           <span className="fascia-light" aria-hidden="true" />
-        </Link>
-        <nav className="fascia-nav" aria-label="Personal site">
-          <NavLink to="/" end>
-            Home
-          </NavLink>
-          <NavLink to="/cv">CV</NavLink>
-          <NavLink to="/blog">Blog</NavLink>
-        </nav>
+        </div>
       </div>
       <div className="fascia-copy">
         <h1 id="personal-title">
@@ -52,8 +40,8 @@ export function PersonalIntro({
         </p>
       </div>
       <div className="fascia-controls">
-        <div className="fascia-actions">
-          {view === 'cv' ? (
+        {view === 'cv' && (
+          <div className="fascia-actions">
             <Button asChild variant="outline">
               <a
                 href="/giulio-jensen-ungaretti-cv.pdf"
@@ -64,23 +52,8 @@ export function PersonalIntro({
                 Download CV
               </a>
             </Button>
-          ) : (
-            <Button asChild variant="outline">
-              <Link to="/cv">
-                Read my CV
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </Button>
-          )}
-          {view !== 'blog' && (
-            <Button asChild variant="outline">
-              <Link to="/blog">
-                Writing
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </Button>
-          )}
-        </div>
+          </div>
+        )}
         <div className="fascia-material">
           <p className="fascia-caption">
             People. Software.

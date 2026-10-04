@@ -1,6 +1,7 @@
 import { PageFrame, type LayoutProps } from '@/layouts/PageFrame'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PersonalIntro } from '@/components/PersonalIntro'
+import { NavigationDial } from '@/components/NavigationDial'
 import type { NavigationPage } from '@/lib/navigation-dial'
 import { normalizePath } from '@/lib/blog'
 
@@ -16,36 +17,27 @@ export function PersonalLayout(props: LayoutProps) {
         : path === '/blog'
           ? 'blog'
           : undefined
+  function select(next: NavigationPage) {
+    void navigate(next === 'home' ? '/' : `/${next}`)
+  }
   return (
     <PageFrame
       {...props}
-      intro={
-        view && (
-          <PersonalIntro
-            view={view}
-            onSelect={(next) => {
-              void navigate(next === 'home' ? '/' : `/${next}`)
-            }}
-          />
-        )
-      }
+      intro={view && <PersonalIntro view={view} onSelect={select} />}
       header={
         view ? null : (
           <>
-            <Link
-              to="/"
-              className="wordmark"
-              aria-label="Giulio Ungaretti home"
-            >
+            <span className="wordmark">
               gu<span>.</span>
-            </Link>
-            <nav className="personal-nav" aria-label="Personal site">
-              <NavLink to="/" end>
-                Home
-              </NavLink>
-              <NavLink to="/cv">CV</NavLink>
-              <NavLink to="/blog">Blog</NavLink>
-            </nav>
+            </span>
+            <NavigationDial
+              value={
+                path.startsWith('/blog') || /^\/\d{4}\/\d{2}\//.test(path)
+                  ? 'blog'
+                  : 'home'
+              }
+              onValueChange={select}
+            />
           </>
         )
       }
@@ -55,6 +47,16 @@ export function PersonalLayout(props: LayoutProps) {
           <a href="/feed.xml" className="text-link">
             RSS feed
           </a>
+          <noscript>
+            <nav
+              className="dial-fallback"
+              aria-label="Personal site without JavaScript"
+            >
+              <a href="/">Home</a>
+              <a href="/cv/">CV</a>
+              <a href="/blog/">Blog</a>
+            </nav>
+          </noscript>
         </>
       }
     />

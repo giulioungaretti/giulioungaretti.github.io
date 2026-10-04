@@ -20,10 +20,16 @@ describe('combined personal site', () => {
     (path) => {
       page(path)
       expect(
-        within(screen.getByRole('navigation', { name: 'Personal site' }))
-          .getAllByRole('link')
-          .map((link) => link.getAttribute('href')),
-      ).toEqual(['/', '/cv', '/blog'])
+        within(screen.getByRole('group', { name: 'Rotary navigation' }))
+          .getAllByRole('button')
+          .map((button) => button.textContent),
+      ).toEqual(['Home', 'CV', 'Blog'])
+      expect(
+        screen.getByRole('slider', { name: 'Page selector' }),
+      ).toHaveAttribute(
+        'aria-valuetext',
+        path === '/' ? 'Home' : path === '/cv' ? 'CV' : 'Blog',
+      )
       const hrefs = screen
         .getAllByRole('link')
         .map((link) => link.getAttribute('href'))

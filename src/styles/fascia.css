@@ -38,30 +38,6 @@
   box-shadow: inset 0 1px 2px rgb(38 25 20 / 25%);
 }
 
-.fascia-nav {
-  display: flex;
-  gap: 28px;
-}
-
-.fascia-nav a {
-  min-width: 44px;
-  min-height: 44px;
-  padding-block: 12px;
-  font-size: 14px;
-  color: var(--muted-foreground);
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
-}
-
-.fascia-nav a[aria-current='page'] {
-  color: var(--foreground);
-  border-color: var(--foreground);
-}
-
-.fascia-nav a:hover {
-  color: var(--foreground);
-}
-
 .fascia-copy {
   margin-top: 54px;
 }
@@ -92,13 +68,14 @@
   margin-top: 42px;
   padding-top: 26px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
   gap: 24px;
 }
 
 .fascia-actions {
+  margin-inline-end: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -118,6 +95,17 @@
 
 .blog-archive > h2 {
   margin-bottom: 24px;
+}
+
+.dial-fallback {
+  display: flex;
+  gap: 24px;
+}
+
+.dial-fallback a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
 }
 
 @media (max-width: 750px) {
@@ -146,14 +134,6 @@
 
   .fascia-header {
     gap: 20px;
-  }
-
-  .fascia-nav {
-    gap: 18px;
-  }
-
-  .fascia-nav a {
-    font-size: 12px;
   }
 
   .fascia-copy {

@@ -61,12 +61,29 @@ describe('CV and navigation', () => {
       screen.getByRole('link', { name: 'Download CV (PDF)' }),
     ).toHaveAttribute('href', '/giulio-jensen-ungaretti-cv.pdf')
     expect(
-      screen.getByRole('navigation', { name: 'Personal site' }),
+      screen.getByRole('slider', { name: 'Page selector' }),
     ).toBeInTheDocument()
     expect(
       screen.queryByRole('link', { name: 'Admin login' }),
     ).not.toBeInTheDocument()
   })
+  it.each(['/', '/cv', '/blog', '/blog/hello-world'])(
+    'uses only the dial for site navigation on %s',
+    (path) => {
+      const { container } = renderRoute(path)
+      expect(
+        screen.getAllByRole('slider', { name: 'Page selector' }),
+      ).toHaveLength(1)
+      expect(container.querySelector('.fascia-nav')).not.toBeInTheDocument()
+      expect(container.querySelector('.personal-nav')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('link', { name: 'Read my CV' }),
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('link', { name: 'Writing' }),
+      ).not.toBeInTheDocument()
+    },
+  )
   it('explains demo entry without collecting credentials', () => {
     renderRoute('/login')
     expect(screen.getByText(/No real authentication/)).toBeInTheDocument()

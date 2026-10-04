@@ -149,7 +149,7 @@ There is no design-system package, backend abstraction, global state library, or
 
 Import primitives from `@/components/ui/*` and composed components from `@/components/system`. The `@/` alias resolves to `src/`.
 
-The approved wide-fascia identity plate is used on Home, CV and the blog archive. Its persistent three-position `NavigationDial` is controlled by a typed `'home' | 'cv' | 'blog'` value and an `onValueChange` callback. It supports mouse/touch rotation with end stops and release-to-snap, native range keyboard controls, clickable labels, and focused-only scrolling. Escape, pointer cancellation or focus loss restores the current selection. The dial navigates real routes without losing keyboard focus. Article pages use the compact header to leave room for reading. The earlier composition gallery remains a development-only prototype.
+The approved wide-fascia identity plate is used on Home, CV and the blog archive. Its persistent three-position `NavigationDial` is the **only site-wide page selector**: no duplicate Home/CV/Blog top navigation or CV/writing buttons. It is controlled by a typed `'home' | 'cv' | 'blog'` value and an `onValueChange` callback, with mouse/touch rotation, end stops, release-to-snap, native range keys, clickable labels, and focused-only scrolling. Escape, pointer cancellation or focus loss restores the current selection. The dial navigates real routes without losing keyboard focus; articles use a compact header with the same selector. The CV retains its PDF download, and content links still open articles. A footer navigation fallback appears only when JavaScript is disabled. The earlier composition gallery remains a development-only prototype.
 
 ```tsx
 import { RotateCcw } from 'lucide-react'
