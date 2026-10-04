@@ -116,6 +116,8 @@ The original `/2026/04/hello-world/` URL remains a fully rendered article page; 
 
 ## Stack and organization
 
+Reusable components are published separately in [giulioungaretti/home-design-system](https://github.com/giulioungaretti/home-design-system), with its live reference at [giulioungaretti.me/home-design-system/](https://giulioungaretti.me/home-design-system/). This site installs a pinned Git commit of `@giulioungaretti/home-design-system`, imports its compiled stylesheet, and keeps small compatibility reexports under the existing component paths. No component implementations or runtime palette literals are maintained twice. The library is published on GitHub, not the npm registry.
+
 React 19.3, Vite 8, Tailwind CSS 4, TypeScript 6.0, React Router, react-markdown/remark-gfm, shadcn/ui source components backed by individual Radix packages, class-variance-authority, lucide-react, clsx, and tailwind-merge. The lockfile pins resolved versions. TypeScript 6.0.3 is the newest stable release currently supported by typescript-eslint; TypeScript 7 is not forced past its peer range.
 
 ```text

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import './styles/tokens.css';
+@import '@giulioungaretti/home-design-system/styles.css';
 @import './styles/appliance.css';
 @import './styles/reading.css';
 @import './styles/fascia.css';

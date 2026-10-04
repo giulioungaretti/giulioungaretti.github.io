@@ -22,6 +22,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@giulioungaretti/home-design-system": "git+https://github.com/giulioungaretti/home-design-system.git#0316ab7fb7b80f6c83714ddff22ec0c54b4cd87f",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
