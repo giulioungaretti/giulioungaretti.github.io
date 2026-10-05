@@ -34,7 +34,7 @@ npm run dev -- --port 5173 --strictPort
 npm run test:browser
 ```
 
-`PREVIEW_URL` overrides the test address; `QA_OUTPUT` overrides the screenshot/report directory (default `.impeccable/qa`, ignored by Git). `SKIP_SCREENSHOTS=1` runs checks without image capture. For full production checks, build and start `npm run preview`, then run `PREVIEW_URL=http://127.0.0.1:4173 EXPECT_PRERENDER=1 npm run test:browser`. Use the URL printed by your own preview process; a busy port may belong to another project. You can select an explicit port with `npm run preview -- --port 4197 --strictPort`.
+`PREVIEW_URL` overrides the test address; `QA_OUTPUT` overrides the screenshot/report directory (default `.impeccable/qa`, ignored by Git). `SKIP_SCREENSHOTS=1` runs checks without image capture. `BROWSER_ENGINE=webkit` runs the same checks with WebKit; install the browser with `npx playwright install webkit` if missing. For full production checks, build and start `npm run preview`, then run `PREVIEW_URL=http://127.0.0.1:4173 EXPECT_PRERENDER=1 npm run test:browser`. Use the URL printed by your own preview process; a busy port may belong to another project. You can select an explicit port with `npm run preview -- --port 4197 --strictPort`.
 
 ## Routes and demo boundaries
 
@@ -149,7 +149,7 @@ The separate design-system package owns reusable primitives and semantic tokens.
 
 Import primitives from `@/components/ui/*` and composed components from `@/components/system`. The `@/` alias resolves to `src/`.
 
-The approved personal composition is **Cassette sleeve + Sun tray + Editorial-led + White studio**. Identity and the CV/Blog selector stay in a shallow enamel sleeve; the introduction and records sit in the reading sheet below. `PersonalPageSwitch` is app-specific composition over the package's unchanged `Button`: two native radio keys, a yellow trough, white selected cap, visible focus, and native arrow-key operation. Route changes preserve control focus. No Home choice, dial, duplicate top navigation, role caption or decorative status dot remains. Articles use the same sleeve and keep their own title as the page's `h1`. The original PDF and article links remain, with CV/Blog links available without JavaScript. Development-only mockups are not exported or deployed. The library's rotary component remains available independently; this site does not modify it.
+The approved personal composition is **Cassette sleeve + Sun tray + Editorial-led + White studio**. Identity and the CV/Blog selector stay in a shallow enamel sleeve; the introduction and records sit in the reading sheet below. `PersonalPageSwitch` is app-specific composition over the package's unchanged `Button`: two native radio keys, a yellow trough, white selected cap, visible focus, and native arrow-key operation. Route changes preserve control focus and explicitly return the viewport to the page top. Content focus uses `preventScroll` so WebKit cannot scroll past the cassette after the reset. No Home choice, dial, duplicate top navigation, role caption or decorative status dot remains. Articles use the same sleeve and keep their own title as the page's `h1`. The original PDF and article links remain, with CV/Blog links available without JavaScript. Development-only mockups are not exported or deployed. The library's rotary component remains available independently; this site does not modify it.
 
 ```tsx
 import { RotateCcw } from 'lucide-react'

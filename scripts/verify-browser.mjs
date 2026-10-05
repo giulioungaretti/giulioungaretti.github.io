@@ -1,4 +1,4 @@
-import { chromium } from 'playwright'
+import { chromium, webkit } from 'playwright'
 import AxeBuilder from '@axe-core/playwright'
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -13,7 +13,10 @@ assert.match(
   /<title>Giulio Ungaretti/,
   'PREVIEW_URL is not this project’s server',
 )
-const browser = await chromium.launch()
+const engine = process.env.BROWSER_ENGINE ?? 'chromium'
+if (engine !== 'chromium' && engine !== 'webkit')
+  throw new Error(`Unsupported BROWSER_ENGINE: ${engine}`)
+const browser = await (engine === 'webkit' ? webkit : chromium).launch()
 const findings = []
 try {
   await Promise.all(
@@ -90,6 +93,40 @@ try {
             dot: 'rgb(200, 32, 0)',
             canvas: 'rgb(255, 255, 255)',
           })
+          if (name === 'home' || name === 'cv') {
+            const intro = await page.evaluate(() => {
+              const box = (selector) => {
+                const rect = document
+                  .querySelector(selector)
+                  .getBoundingClientRect()
+                return {
+                  x: rect.x,
+                  y: rect.y,
+                  right: rect.right,
+                  bottom: rect.bottom,
+                  width: rect.width,
+                }
+              }
+              return {
+                container: box('.personal-layout'),
+                row: box('.personal-intro'),
+                paragraph: box('.personal-intro p'),
+                download: box('.personal-download'),
+              }
+            })
+            assert.ok(Math.abs(intro.download.right - intro.row.right) < 1)
+            if (intro.container.width >= 1024) {
+              assert.ok(Math.abs(intro.download.y - intro.paragraph.y) < 1)
+              assert.ok(intro.download.x >= intro.paragraph.right + 31)
+              if (intro.container.width >= 1120)
+                assert.ok(
+                  intro.paragraph.width > 700,
+                  'Wide summary must expand beyond the old 70ch cap',
+                )
+            } else {
+              assert.ok(intro.download.y >= intro.paragraph.bottom + 19)
+            }
+          }
           assert.equal(
             await page.locator('.fascia-nav, .personal-nav').count(),
             0,
@@ -198,7 +235,12 @@ try {
       )
       await page.goto(`${baseURL}/`)
       await page.getByRole('link', { name: 'Skip to content' }).waitFor()
-      await page.keyboard.press('Tab')
+      // macOS WebKit includes links in keyboard navigation with Option+Tab.
+      await page.keyboard.press(
+        engine === 'webkit' && process.platform === 'darwin'
+          ? 'Alt+Tab'
+          : 'Tab',
+      )
       assert.equal(
         await page.evaluate(() => document.activeElement?.textContent),
         'Skip to content',
@@ -253,6 +295,38 @@ try {
         .getByRole('heading', { name: 'Writing', exact: true })
         .waitFor()
       assert.ok(await blogKey.isChecked())
+      for (const view of ['cv', 'blog', 'cv']) {
+        await page
+          .locator('.personal-switch-key')
+          .filter({
+            has: page.locator(`input[value="${view}"]`),
+          })
+          .click()
+        await page
+          .getByRole('heading', {
+            name: view === 'cv' ? 'Experience' : 'Writing',
+            exact: true,
+          })
+          .waitFor()
+        await page.evaluate(
+          () =>
+            new Promise((resolve) =>
+              requestAnimationFrame(() => requestAnimationFrame(resolve)),
+            ),
+        )
+        const viewportPosition = await page.evaluate(() => ({
+          scroll: window.scrollY,
+          cassetteTop: document
+            .querySelector('.personal-sleeve')
+            .getBoundingClientRect().top,
+        }))
+        assert.equal(
+          viewportPosition.scroll,
+          0,
+          `${engine}: ${view} navigation must not scroll below the cassette`,
+        )
+        assert.ok(viewportPosition.cassetteTop >= 0)
+      }
       const pdf = await context.request.get(
         `${baseURL}/giulio-jensen-ungaretti-cv.pdf`,
       )

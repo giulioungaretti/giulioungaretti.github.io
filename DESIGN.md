@@ -198,6 +198,8 @@ Headings balance their wrapping; paragraphs use pretty wrapping. Type is sentenc
 
 The personal shell caps at 1120px, with 40px/44px outer padding. The sleeve uses 18px/24px insets; its reading sheet is inset 10px and padded 28px/32px/32px. The CV/Blog key assembly remains fixed between views. At 700px the shell uses 24px/20px padding, identity and selector stack, and the reading sheet uses 24px/18px with no lateral inset. Admin/reference retain the prior 1200px shell and topbar grammar below.
 
+The CV introduction uses a fluid reading column capped at 75ch. From a 1024px personal-site container, its PDF action occupies a separate top-aligned right column rather than another row under the paragraph. Narrower containers put the action in a right-aligned row with a 20px gap; copy uses the available width without affecting the identity sleeve or page selector.
+
 - **Up to 1000px:** shell gutters become 32px. CV opening narrows from a 328px plate column/68px gap to 260px/40px. The admin's 320px detail column drops below the service list, with its contents arranged in two columns.
 - **Up to 700px:** the personal cassette stacks identity and the joined selector without moving the selector when CV/Blog changes. Personal records and support sections become single-column. Demo/reference gutters become 20px and their topbars shrink to an 88px minimum; their existing responsive behavior remains unchanged.
 - **Reading versus operation:** the CV uses dated rows separated by rules, not a stack of cards. The demo entry is capped at 650px; the showcase pairs a 230px explanatory column with specimens until mobile stacking.

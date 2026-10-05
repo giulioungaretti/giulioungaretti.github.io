@@ -1,7 +1,7 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/App'
 import { filterServices, initialServices } from '@/data/services'
 
@@ -111,6 +111,42 @@ describe('CV and navigation', () => {
     expect(
       screen.getByRole('heading', { name: 'Experience' }),
     ).toBeInTheDocument()
+  })
+})
+
+describe('personal route scroll positioning', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  it('prevents reading-sheet focus from scrolling past the cassette on pointer navigation', () => {
+    renderRoute('/blog')
+    const main = screen.getByRole('main')
+    main.focus()
+    const focus = vi.spyOn(main, 'focus')
+    const scroll = vi.spyOn(window, 'scrollTo').mockClear()
+    fireEvent.click(screen.getByRole('radio', { name: 'CV' }))
+    expect(
+      screen.getByRole('heading', { name: 'Experience' }),
+    ).toBeInTheDocument()
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true })
+    expect(scroll).toHaveBeenCalledWith({ top: 0, behavior: 'instant' })
+  })
+
+  it('keeps native keyboard focus while resetting the viewport on both transitions', async () => {
+    renderRoute('/blog')
+    const cv = screen.getByRole('radio', { name: 'CV' })
+    const blog = screen.getByRole('radio', { name: 'Blog' })
+    const scroll = vi.spyOn(window, 'scrollTo').mockClear()
+    const into = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockClear()
+    blog.focus()
+    await userEvent.keyboard('{ArrowLeft}')
+    expect(cv).toBeChecked()
+    expect(cv).toHaveFocus()
+    expect(scroll).toHaveBeenCalledWith({ top: 0, behavior: 'instant' })
+    await userEvent.keyboard('{ArrowRight}')
+    expect(blog).toBeChecked()
+    expect(blog).toHaveFocus()
+    expect(scroll).toHaveBeenCalledTimes(2)
+    expect(into).not.toHaveBeenCalled()
   })
 })
 

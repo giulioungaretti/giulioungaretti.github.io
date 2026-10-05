@@ -127,8 +127,16 @@ body:has(.personal-layout) {
   min-width: 0;
 }
 
+.personal-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
 .personal-intro > p {
-  max-width: 70ch;
+  width: 100%;
+  max-width: 75ch;
   font-size: 17px;
   line-height: 1.75;
 }
@@ -136,7 +144,7 @@ body:has(.personal-layout) {
 .personal-download {
   width: fit-content;
   max-width: 100%;
-  margin-top: 20px;
+  justify-self: end;
   background: var(--palette-sun);
   color: var(--foreground);
 }
@@ -281,6 +289,13 @@ body:has(.personal-layout) {
 .personal-fallback {
   display: flex;
   gap: 24px;
+}
+
+@container personal-site (min-width: 1024px) {
+  .personal-intro:has(.personal-download) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 32px;
+  }
 }
 
 @container personal-site (max-width: 700px) {

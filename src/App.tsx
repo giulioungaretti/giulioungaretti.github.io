@@ -28,11 +28,9 @@ export function App() {
     updateDocumentMetadata(metadata)
     if (initialPath.current !== location.pathname) {
       if (!document.activeElement?.closest('.personal-page-switch')) {
-        mainRef.current?.focus()
-        window.scrollTo({ top: 0, behavior: 'instant' })
-      } else if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.scrollIntoView({ block: 'nearest' })
+        mainRef.current?.focus({ preventScroll: true })
       }
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
     initialPath.current = location.pathname
   }, [location.pathname])
